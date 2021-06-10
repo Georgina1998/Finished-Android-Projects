@@ -26,8 +26,8 @@ public class PollService extends IntentService {
     //In order to service you use to pol for search results
     private static final String TAG = "PollService";
 
-    // Set interval to 1 minute
-    private static final long POLL_INTERVAL_MS = TimeUnit.MINUTES.toMillis(1);
+    // Set interval to 10 minutes
+    private static final long POLL_INTERVAL_MS = TimeUnit.MINUTES.toMillis(10);
 
     public static final String ACTION_SHOW_NOTIFICATION =
             "com.asimpson.photogallery.SHOW_NOTIFICATION";
