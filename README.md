@@ -78,4 +78,60 @@ Locatr performs a Flickr geosearch thats asks the user for its current loction a
 
 The Tasks app fetches JSON data from the Tasks API created in our Web Development II course. It reads the JSON data and presents the tasks from the array in a ListView.  
 
+In making the app most efficient, a singleton pattern was apllied which encapsulates RequestQueue and othe Volley Functionlity. 
+
+```java 
+
+public class MySingleton{
+
+...
+
+public RequestQueue getRequestQueue() {
+        if (requestQueue == null) {
+            // getApplicationContext() is key, it keeps you from leaking the
+            // Activity or BroadcastReceiver if someone passes one in.
+            requestQueue = Volley.newRequestQueue(ctx.getApplicationContext());
+        }
+        return requestQueue;
+    }
+
+...
+
+}
+
+```
+
+Using a JsonObjectRequest for the Volley class, a request was made to retrive a task based on the task's ID, to then display in a listview 
+
+```java 
+
+public void getTaskbyId(String taskId, Volleyresponserlisterner volleyresponserlisterner){
+
+       String url = TASKS_URL + taskId;
+
+       List<TaskModel> taskModels = new ArrayList<>();
+
+       JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+           @Override
+           public void onResponse(JSONObject response) {
+               try{
+                   JSONArray tasks = response.getJSONArray("tasks");
+
+                    for(int i=0; i<tasks.length(); i++){
+                        TaskModel allTasks = new TaskModel();
+                        JSONObject first_task_from_api = (JSONObject) tasks.get(i);
+                        allTasks.setId(first_task_from_api.getInt("id"));
+                        allTasks.setTitle(first_task_from_api.getString("title"));
+                        allTasks.setDescription(first_task_from_api.getString("description"));
+                        allTasks.setDone(first_task_from_api.getBoolean("done"));
+                        taskModels.add(allTasks);
+                    }
+                    volleyresponserlisterner.onResponse(taskModels);
+               } catch ( JSONException e){
+                   e.printStackTrace();
+               }
+
+           }
+
+```
 
